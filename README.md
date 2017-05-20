@@ -7,10 +7,12 @@ Hardware Needed:
 - Arduino
 - HM10 Bluetooth Module
 - LCD screen
-- EEG headset (Mindflex)
+- EEG NeuroSky headset (Mindflex)
 
 Soldering the EEG headset:
 Solder the wire to the TPin on the bottom left corner of the NeuroSky chip. Solder ground to the battery. Put the TPin to the RX pin of the Arduino.
+
+*Include Brain.h/Brain.cpp*
 
 Instructions:
 
