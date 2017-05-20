@@ -104,7 +104,7 @@ bool Brain::update() {
         // Keep track of the last byte so we can find the sync byte pairs.
         lastByte = latestByte;
     }
-    	
+    	calculateAverage();
 
     if (freshPacket) {
         freshPacket = false;
