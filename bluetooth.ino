@@ -1,9 +1,18 @@
 #include <SoftwareSerial.h>
+#include <LiquidCrystal.h>
 
-#define BLUE_LED 2
-#define RED_LED 3
+const int BUTTON_PIN = 5;
+const int RED_LED = 3;
+const int BLUE_LED = 2;
+
+LiquidCrystal lcd(22,2,3,24,4,26);
 
 SoftwareSerial mySerial(7, 8); // RX, TX
+
+int buttonCount = 0;
+int buttonPressed = 0;
+int buttonState = 0;
+int bluetoothRead = -1;
 
 void setup() {  
 	Serial.begin(9600);
@@ -12,41 +21,53 @@ void setup() {
 	// Once you have found the correct baudrate,
 	// you can update it using AT+BAUDx command 
 	// e.g. AT+BAUD0 for 9600 bauds
+  pinMode(BUTTON_PIN, INPUT);
+  //pinMode(BLUE_LED, OUTPUT);
+  //pinMode(RED_LED, OUTPUT);
 	mySerial.begin(9600);
 }
 
 void loop() {  
-	int c;
+	
+	buttonPressed = digitalRead(BUTTON_PIN);
+	if(buttonPressed != buttonState) { //if the button state has changed
+    if(buttonPressed == HIGH) {
+      buttonCount++;
+      //Serial.println(buttonCount);
+    }
+	}
+  buttonState = buttonPressed;
+  
 	if (mySerial.available()) {
 		Serial.println("bluetooth is available");
-		c = mySerial.read();  
+		bluetoothRead = mySerial.read();  
 		Serial.println("Got input:");
-		if (c == 1)
+		if (bluetoothRead == 1)
 		{
 			// Non-zero input means "turn on LED".
 			Serial.println("Red LED On");
-			Serial.println(c);
+			Serial.println(bluetoothRead);
       analogWrite(RED_LED, 255);
 		}
-		else if (c == 2)
+		else if (bluetoothRead == 2)
 		{
 			// Input value zero means "turn off LED".
 			Serial.println("Blue LED on");
-			Serial.println(c);
-			digitalWrite(BLUE_LED, HIGH);
+			Serial.println(bluetoothRead);
+			analogWrite(BLUE_LED, 255);
 		} 
-		else if (c == 3)
+		else if (bluetoothRead == 3)
 		{
 			// Input value zero means "turn off LED".
 			Serial.println("Red LED off");
-			Serial.println(c);
+			Serial.println(bluetoothRead);
 			digitalWrite(RED_LED, LOW);
 		}
-		else if (c == 4)
+		else if (bluetoothRead == 4)
 		{
 			// Input value zero means "turn off LED".
 			Serial.println("Blue LED off");
-			Serial.println(c);
+			Serial.println(bluetoothRead);
 			digitalWrite(BLUE_LED, LOW);
 		}
 	}
