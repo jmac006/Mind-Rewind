@@ -12,9 +12,10 @@ Hardware Needed:
 Soldering the EEG headset:
 Solder the wire to the TPin on the bottom left corner of the NeuroSky chip. Solder ground to the battery. Put the TPin to the RX pin of the Arduino.
 
-*Include Brain.h/Brain.cpp*
+*Install the Arduino library for reading NeuroSky EEG Brain data: https://github.com/kitschpatrol/Brain and place it in the Documents/Arduino/Library folder*
 
-Instructions:
+
+How to use the program:
 
 1) User enters page # (in hex) on phone.
 
