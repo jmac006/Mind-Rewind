@@ -14,6 +14,21 @@ Solder the wire to the TPin on the bottom left corner of the NeuroSky chip. Sold
 
 *Install the Arduino library for reading NeuroSky EEG Brain data: https://github.com/kitschpatrol/Brain and place it in the Documents/Arduino/Library folder*
 
+PIN-OUT:
+PIN0 = EEG (RX)
+PIN1
+PIN2 = Button
+PIN3
+PIN4 = LCD (RS)
+PIN5 = LCD (Enable)
+PIN6 = LCD
+PIN7 = Bluetooth (RX - Arduino, TX - Bluetooth)
+PIN8 = Bluetooth (TX - Arduino, RX - Bluetooth)
+PIN9 = LCD
+PIN10
+PIN11 = EEG (Power)
+PIN12 = LCD
+PIN13 = LCD
 
 How to use the program:
 
