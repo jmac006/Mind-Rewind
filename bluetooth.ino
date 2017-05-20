@@ -5,7 +5,7 @@ const int BUTTON_PIN = 5;
 const int RED_LED = 3;
 const int BLUE_LED = 2;
 
-LiquidCrystal lcd(22,2,3,24,4,26);
+LiquidCrystal lcd(4,5,6,12,9,13);
 
 SoftwareSerial mySerial(7, 8); // RX, TX
 
@@ -14,6 +14,21 @@ int buttonPressed = 0;
 int buttonState = 0;
 int bluetoothRead = -1;
 
+void test(){
+  lcd.setCursor(0,0);
+  lcd.print("testing");
+  lcd.setCursor(0,1);
+  lcd.print("BlueTooth");
+}
+void turnOn(){
+  lcd.setCursor(0,0);
+  lcd.print("");
+  lcd.setCursor(0,1);
+  lcd.print("");
+}
+void turnOff(){
+ 
+}
 void setup() {  
 	Serial.begin(9600);
 	// If the baudrate of the HM-10 module has been updated,
@@ -25,6 +40,8 @@ void setup() {
   //pinMode(BLUE_LED, OUTPUT);
   //pinMode(RED_LED, OUTPUT);
 	mySerial.begin(9600);
+  
+  lcd.begin(16,2);
 }
 
 void loop() {  
@@ -66,9 +83,10 @@ void loop() {
 		else if (bluetoothRead == 4)
 		{
 			// Input value zero means "turn off LED".
-			Serial.println("Blue LED off");
-			Serial.println(bluetoothRead);
-			digitalWrite(BLUE_LED, LOW);
+			//Serial.println("Blue LED off");
+			//Serial.println(bluetoothRead);
+			//digitalWrite(BLUE_LED, LOW);
+      test();
 		}
 	}
 }
