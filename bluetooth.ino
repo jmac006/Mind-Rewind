@@ -1,13 +1,12 @@
+#include <Brain.h>
 #include <SoftwareSerial.h>
 #include <LiquidCrystal.h>
-#include <Brain.h>
 
 Brain brain(Serial);
 int attention;
 
-const int BUTTON_PIN = 5;
+const int BUTTON_PIN = 2;
 const int RED_LED = 3;
-const int BLUE_LED = 2;
 const int RX = 7;
 const int TX = 8;
 
@@ -41,7 +40,6 @@ void setup() {
 	Serial.begin(9600);
   mySerial.begin(9600);
   pinMode(BUTTON_PIN, INPUT);
-  //pinMode(BLUE_LED, OUTPUT);
   //pinMode(RED_LED, OUTPUT);
 	
   lcd.begin(16,2);
@@ -53,7 +51,7 @@ void checkButtonPress() {
   if(buttonPressed != buttonState) { //if the button state has changed
     if(buttonPressed == HIGH) {
       buttonCount++;
-      //Serial.println(buttonCount);
+      Serial.println(buttonCount);
     }
   }
   buttonState = buttonPressed;
@@ -72,13 +70,6 @@ void checkBluetooth() {
       analogWrite(RED_LED, 255);
     }
     else if (bluetoothRead == 2)
-    {
-      // Input value zero means "turn off LED".
-      Serial.println("Blue LED on");
-      Serial.println(bluetoothRead);
-      analogWrite(BLUE_LED, 255);
-    } 
-    else if (bluetoothRead == 3)
     {
       // Input value zero means "turn off LED".
       Serial.println("Red LED off");
