@@ -44,10 +44,9 @@ int currentPageNumber = 1;
 int startingPageNumber = 1;
 bool isLCDOn = false;
 bool start = false;
-bool newPage = true;
+bool newPage = false;
 
-AttentionLevel lowAttentionArray[10]; //holds 10 lowest scores
-int attentionIndex = 0;
+double lowAttentionArr[10]; //lowest 10 scores
 
 void turnLCDOn(){
   lcd.setCursor(0,0);
@@ -55,7 +54,21 @@ void turnLCDOn(){
   isLCDOn = true;
 }
 void printInformation(){
+  lcd.clear();
   //Output recommendation of pages to re-read
+  double tempMin = 10000;
+  int minimum = 0;
+  for(int i = 0; i < 10; i++) {
+    Serial.println("Low Score" + String(i+1) + " : " + String(lowAttentionArr[i]));
+    //lcd.println("Low Score" + String(i+1) + " : " + String(lowAttentionArr[i]));
+    if(tempMin > lowAttentionArr[i] && lowAttentionArr[i] > 0) {
+      tempMin = lowAttentionArr[i];
+      minimum = i;
+    }
+  }
+  lcd.println("Review page " + String(minimum + 1));
+  lcd.setCursor(0,1);
+  lcd.println("Min Score: " + String(tempMin));
 }
 void setup() {
   attention = brain.readAttention();
@@ -77,6 +90,7 @@ void checkButtonPress() {
       lcd.clear();
       String outputPageNum = "Current Page: " + String(currentPageNumber);
       lcd.print(outputPageNum);
+      newPage = true;
     }
     delay(5); //prevent double click
   }
@@ -93,7 +107,6 @@ void checkBluetooth() {
     {
       //Stops collecting brain information, outputs the recommendation of pages to re-read
       printInformation();
-      lcd.print("All done!");
     }
     else if (bluetoothRead == 0xFF)
     {
@@ -114,30 +127,32 @@ void checkBluetooth() {
   }
 }
 
+double sum = 0;
+double average = 0;
+int numOfInstances = 0;
+
 void processBrainWaves() {
-  int tempPage = currentPageNumber;
-  int numOfInstances = 0;
+  
   if (brain.update()) {
     checkButtonPress();
     numOfInstances++;
     //Serial.println(brain.readErrors());
     //Serial.println(brain.readCSV());
     attention = brain.readAttention();
-    Serial.println(attention);
-    delay(1000);
-    double sum = 0;
-    double average = 0;
-    if(tempPage == currentPageNumber) 
+    //Serial.println(attention);
+    delay(500);
+    
+    if(!newPage) 
     {
       sum += attention;
     }
     else {
-      Serial.println("Mean: " + String(average));
+      newPage = false;
     }
+    //Serial.println("Mean: " + String(average));
     average = sum/numOfInstances;
-    AttentionLevel pageAverage = AttentionLevel(currentPageNumber, average);
-    
-    //lowAttentionArray[currentPageNumber] = pageAverage;
+
+    lowAttentionArr[currentPageNumber] = average;
     lcd.setCursor(0,1);
     lcd.print("Focus Score: " + String(attention));
   }
