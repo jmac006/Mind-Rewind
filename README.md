@@ -1,4 +1,4 @@
-# Study Band
+# Mind Rewind
 Cutie Hackathon Project
 
 This project was created by Justin Mac, Spyridon Catechis, and Ryan Wilson.
