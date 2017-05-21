@@ -34,13 +34,13 @@ PIN13 = LCD
 
 How to use the program:
 
-1) User enters page # (in hex) on phone.
+1) User enters page number (in hex) on phone.
 
-2) Phone transmits page # to arduino via bluetooth
+2) Phone transmits page number to arduino via bluetooth
 
-3) Once page # recieved, the program begins collecting brain information via EEG headset.
+3) Once page number recieved, the program begins collecting brain information via EEG headset.
 
-4) As user reads the textbook, average the score until user hits button for next page. Save the average in array. Increment currentPage.
+4) As user reads the textbook, the program averages the score until the user hits the button for the next page.
 
 5) Until user stops reading, collect data for each page
 
