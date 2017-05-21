@@ -3,6 +3,28 @@
 #include <LiquidCrystal.h>
 
 Brain brain(Serial);
+
+class AttentionLevel
+{
+  public:
+    int pageNumber;
+    double average; //keeps track of average attention score
+    AttentionLevel()
+    {
+      pageNumber = -500;
+      average = -500;
+    }
+    AttentionLevel(int pnum, double mean)
+    {
+      pageNumber = pnum;
+      average = mean;
+    }
+    bool operator< (const AttentionLevel &rhs)
+    {
+      return average < rhs.average;
+    }
+};
+
 int attention;
 
 const int BUTTON_PIN = 2;
@@ -22,6 +44,10 @@ int currentPageNumber = 1;
 int startingPageNumber = 1;
 bool isLCDOn = false;
 bool start = false;
+bool newPage = true;
+
+AttentionLevel lowAttentionArray[10]; //holds 10 lowest scores
+int attentionIndex = 0;
 
 void turnLCDOn(){
   lcd.setCursor(0,0);
@@ -57,6 +83,7 @@ void checkButtonPress() {
   buttonState = buttonPressed;
 }
 
+
 void checkBluetooth() {
   if (mySerial.available()) {
     Serial.println("bluetooth is available");
@@ -88,18 +115,31 @@ void checkBluetooth() {
 }
 
 void processBrainWaves() {
+  int tempPage = currentPageNumber;
+  int numOfInstances = 0;
   if (brain.update()) {
-    Serial.println(brain.readErrors());
-    Serial.println(brain.readCSV());
+    checkButtonPress();
+    numOfInstances++;
+    //Serial.println(brain.readErrors());
+    //Serial.println(brain.readCSV());
     attention = brain.readAttention();
     Serial.println(attention);
     delay(1000);
-  }
-  if(attention > 10){
-    lcd.setCursor(0,0);
-    lcd.print("testing");
+    double sum = 0;
+    double average = 0;
+    if(tempPage == currentPageNumber) 
+    {
+      sum += attention;
+    }
+    else {
+      Serial.println("Mean: " + String(average));
+    }
+    average = sum/numOfInstances;
+    AttentionLevel pageAverage = AttentionLevel(currentPageNumber, average);
+    
+    //lowAttentionArray[currentPageNumber] = pageAverage;
     lcd.setCursor(0,1);
-    lcd.print("EEG");
+    lcd.print("Focus Score: " + String(attention));
   }
 }
 void loop() { 
