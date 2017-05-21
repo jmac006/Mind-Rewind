@@ -21,16 +21,15 @@ int bluetoothRead = -1;
 int currentPageNumber = 1;
 int startingPageNumber = 1;
 bool isLCDOn = false;
+bool start = false;
 
 void turnLCDOn(){
   lcd.setCursor(0,0);
-  lcd.print("");
-  lcd.setCursor(0,1);
   lcd.print("Welcome!");
   isLCDOn = true;
 }
 void printInformation(){
-  
+  //Output recommendation of pages to re-read
 }
 void setup() {
   attention = brain.readAttention();
@@ -49,6 +48,9 @@ void checkButtonPress() {
     if(buttonPressed == HIGH) { //if there's a button press
       currentPageNumber++;
       Serial.println(currentPageNumber);
+      lcd.clear();
+      String outputPageNum = "Current Page: " + String(currentPageNumber);
+      lcd.print(outputPageNum);
     }
     delay(5); //prevent double click
   }
@@ -64,7 +66,7 @@ void checkBluetooth() {
     {
       //Stops collecting brain information, outputs the recommendation of pages to re-read
       printInformation();
-      //Serial.println(currentPageNumber);
+      lcd.print("All done!");
     }
     else if (bluetoothRead == 0xFF)
     {
@@ -72,19 +74,23 @@ void checkBluetooth() {
     }
     else if ((bluetoothRead != 0 || bluetoothRead != 0xFF) && isLCDOn)
     {
+      //If the bluetoothRead is anything else, the user entered a page number.
       //The LCD must be on to enter the current page number.
       startingPageNumber = bluetoothRead;
       currentPageNumber = bluetoothRead;
-      Serial.println(currentPageNumber);
+      lcd.clear();
+      String outputPageNum = "Current Page: " + String(currentPageNumber);
+      lcd.print(outputPageNum);
+      start = true;
     }
     
   }
 }
 
-void loop() { 
-  checkButtonPress();
-  checkBluetooth();
+void processBrainWaves() {
   if (brain.update()) {
+    Serial.println(brain.readErrors());
+    Serial.println(brain.readCSV());
     attention = brain.readAttention();
     Serial.println(attention);
     delay(1000);
@@ -95,4 +101,12 @@ void loop() {
     lcd.setCursor(0,1);
     lcd.print("EEG");
   }
+}
+void loop() { 
+  checkButtonPress();
+  checkBluetooth(); //shouldn't go into here after it start
+  if(start) {
+    processBrainWaves();
+  }
+  
 }
