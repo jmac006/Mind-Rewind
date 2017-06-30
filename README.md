@@ -1,4 +1,4 @@
-# Mind Rewind
+# Study Rewind
 Cutie Hackathon Project
 
 This project was created by Justin Mac, Spyridon Catechis, and Ryan Wilson. We built this for students who struggle to focus when reading textbooks. The device takes EEG feedback from neural sensors and analyzes the alpha, beta, gamma, and delta waves to construct an "attention" score which is displayed on the LCD screen. Based on this score, the user can determine whether they should re-read the pages with the lowest scores. Every time the user finishes a page, they press the designated button for which the average score is logged along with the page. Then the program starts recording brainwave data for the next page. The user is able to turn on the LCD screen, input the starting page, and turn off the program through the designated iPhone app. The iPhone app is able to submit hex values through the iPhone app, LightBlue.
